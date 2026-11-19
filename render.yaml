@@ -4,7 +4,7 @@ services:
     runtime: node
     plan: starter
     buildCommand: npm ci && npm run build:server
-    startCommand: node dist/server/src/index.js
+    startCommand: node dist/server/server/src/index.js
     healthCheckPath: /api/health
     envVars:
       - key: CLIENT_ORIGIN
