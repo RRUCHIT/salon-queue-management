@@ -27,14 +27,21 @@ import {
 
 const app = express();
 const server = http.createServer(app);
-const allowedOrigin = process.env.CLIENT_ORIGIN || "http://localhost:5173";
+const allowedOrigins = (process.env.CLIENT_ORIGIN || "http://localhost:5173")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+const originAllowed = (origin?: string) =>
+  !origin || allowedOrigins.includes("*") || allowedOrigins.includes(origin);
 
-app.use(cors({ origin: allowedOrigin }));
+app.use(cors({
+  origin: (origin, callback) => callback(originAllowed(origin) ? null : new Error("Origin not allowed"), originAllowed(origin)),
+}));
 app.use(express.json());
 
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigin,
+    origin: (origin, callback) => callback(originAllowed(origin) ? null : new Error("Origin not allowed"), originAllowed(origin)),
   },
 });
 

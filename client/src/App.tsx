@@ -4,7 +4,10 @@ import { io } from "socket.io-client";
 import type { AdminSnapshot, Barber, DisplaySnapshot, HomeSummary, Language, QueueStatusView, Service, StaffOverview } from "../../shared/types";
 import { languageLabels } from "./i18n";
 
-const apiUrl = import.meta.env.VITE_API_URL || "/api";
+const configuredApiUrl = (import.meta.env.VITE_API_URL as string | undefined)?.trim().replace(/\/+$/, "");
+const apiUrl = configuredApiUrl
+  ? (configuredApiUrl.endsWith("/api") ? configuredApiUrl : `${configuredApiUrl}/api`)
+  : "/api";
 const socketUrl = apiUrl === "/api" ? window.location.origin : apiUrl.replace(/\/api\/?$/, "");
 const socketClient = () => io(socketUrl, { transports: ["websocket", "polling"] });
 
