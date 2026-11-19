@@ -27,30 +27,11 @@ import {
 
 const app = express();
 const server = http.createServer(app);
-const allowedOrigins = (process.env.CLIENT_ORIGIN || "http://localhost:5173")
-  .split(",")
-  .map((origin) => origin.trim())
-  .filter(Boolean);
-const deployedVercelOrigin = "https://salon-queue-management-psi.vercel.app";
-const originAllowed = (origin?: string) =>
-  !origin
-  || allowedOrigins.includes("*")
-  || allowedOrigins.includes(origin)
-  || origin === deployedVercelOrigin
-  || (origin?.endsWith(".vercel.app") ?? false);
-
-app.use(cors({
-  origin: (origin, callback) => {
-    if (originAllowed(origin)) callback(null, true);
-    else callback(new Error("Origin not allowed"), false);
-  },
-}));
+app.use(cors({ origin: "*" }));
 app.use(express.json());
 
 const io = new Server(server, {
-  cors: {
-    origin: (origin, callback) => callback(originAllowed(origin) ? null : new Error("Origin not allowed"), originAllowed(origin)),
-  },
+  cors: { origin: "*" },
 });
 
 app.get("/api/health", (_request, response) => {
