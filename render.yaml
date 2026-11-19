@@ -2,7 +2,7 @@ services:
   - type: web
     name: salon-queue-api
     runtime: node
-    plan: starter
+    plan: free
     buildCommand: npm ci && npm run build:server
     startCommand: node dist/server/server/src/index.js
     healthCheckPath: /api/health
@@ -11,9 +11,3 @@ services:
         sync: false
       - key: STAFF_PIN
         sync: false
-      - key: DATABASE_PATH
-        value: /opt/render/project/src/server/data/salon.db
-    disk:
-      name: salon-queue-data
-      mountPath: /opt/render/project/src/server/data
-      sizeGB: 1

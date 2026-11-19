@@ -31,6 +31,13 @@ npm test
 npm run build
 ```
 
+## Free deployment note
+
+The free Render backend does not provide persistent disk storage. SQLite data
+may reset when the service restarts or sleeps. Use a paid persistent disk or
+migrate the database to a managed production database before relying on it for
+real customer records.
+
 ## Feature list
 
 - Live customer join, duplicate protection, status, countdown, cancellation
